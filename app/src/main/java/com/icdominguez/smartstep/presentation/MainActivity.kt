@@ -1,6 +1,7 @@
 package com.icdominguez.smartstep.presentation
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -17,10 +18,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.icdominguez.smartstep.presentation.composables.DefaultScreen
 import com.icdominguez.smartstep.presentation.composables.SmartStepPickerInput
+import com.icdominguez.smartstep.presentation.composables.SmartStepWheelPicker
 import com.icdominguez.smartstep.presentation.composables.dropdown.SmartStepDropDownMenu
 import com.icdominguez.smartstep.presentation.composables.switcher.UnitSwitcher
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
@@ -80,10 +83,15 @@ class MainActivity : ComponentActivity() {
 
                                 Spacer(modifier = Modifier.height(8.dp))
 
-                                SmartStepPickerInput(
-                                    title = "Weight",
-                                    selectedValue = "60 kg",
-                                )
+                                SmartStepWheelPicker(
+                                    items = (1..12).map { "Item $it" },
+                                    onSelected = { i, _ -> Log.d("icd", "Selected $i") },
+                                ) { item, isSelected ->
+                                    Text(
+                                        text = item,
+                                        color = if (isSelected) Color(0xFF1F2024) else Color(0xFF6C6E71)
+                                    )
+                                }
                             }
                         }
                     }

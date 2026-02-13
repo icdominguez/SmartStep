@@ -2,8 +2,6 @@ package com.icdominguez.smartstep.presentation.composables.dropdown
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,7 +37,9 @@ fun SmartStepDropDownMenu(
         },
     ) {
         Column(
-            modifier = Modifier.menuAnchor(
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .menuAnchor(
                 type = ExposedDropdownMenuAnchorType.PrimaryEditable,
                 enabled = true
             ),
@@ -49,8 +49,6 @@ fun SmartStepDropDownMenu(
                 selectedValue = selectedOption,
                 isExpanded = isExpanded,
             )
-
-            Spacer(Modifier.height(8.dp))
         }
 
         ExposedDropdownMenu(
