@@ -1,3 +1,45 @@
 <resources>
     <string name="app_name">Smart Step</string>
+
+    <string name="menu_fix_step_issue">Fix the /"Stop Counting Steps/" issue</string>
+    <string name="menu_step_goal">Step goal</string>
+    <string name="menu_personal_settings">Personal settings</string>
+    <string name="menu_exit">Exit</string>
+    
+    <string name="button_save">Save</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_ok">Ok</string>
+    <string name="button_start">Start</string>
+    <string name="button_continue">Continue</string>
+    <string name="steps">Steps</string>
+    
+    <string name="my_profile">My profile</string>
+    <string name="personal_settings">Personal settings</string>
+    <string name="gender">Gender</string>
+
+    <array name="gender_items">
+        <string name="gender_female">Female</string>
+        <string name="gender_male">Male</string>
+    </array>
+    
+    <string name="height">Height</string>
+    <string name="weight">Weight</string>
+
+    <string name="exit_message">The app will fully close and will not run in the background</string>
+    
+    <string name="modal_bottom_sheet_1_text">To count your steps, Smart Step needs access to your motion sensors.</string>
+    <string name="modal_bottom_sheet_1_button">Allow access</string>
+
+    <string name="modal_bottom_sheet_2_title">Enable access manually</string>
+    <string name="modal_bottom_sheet_2_description">Enable access manually</string>
+
+    <string name="modal_bottom_sheet_2_step_1">1. Open Permissions</string>
+    <string name="modal_bottom_sheet_2_step_2">2. Tap Physical activity</string>
+    <string name="modal_bottom_sheet_2_step_3">3. Select Allow</string>
+
+    <string name="modal_bottom_sheet_2_button">Open settings</string>
+
+    <string name="modal_bottom_sheet_3_title">Background access recommended</string>
+    <string name="modal_bottom_sheet_3_description">Background access helps Smart Step track your activity more reliably.</string>
+
 </resources>
