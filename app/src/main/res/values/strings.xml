@@ -18,12 +18,14 @@
     <string name="gender">Gender</string>
 
     <array name="gender_items">
-        <string name="gender_female">Female</string>
-        <string name="gender_male">Male</string>
+        <item>Female</item>
+        <item>Male</item>
     </array>
     
     <string name="height">Height</string>
+    <string name="height_description">Used to calculate distance</string>
     <string name="weight">Weight</string>
+    <string name="weight_description">Used to calculate calories</string>
 
     <string name="exit_message">The app will fully close and will not run in the background</string>
     
@@ -41,5 +43,7 @@
 
     <string name="modal_bottom_sheet_3_title">Background access recommended</string>
     <string name="modal_bottom_sheet_3_description">Background access helps Smart Step track your activity more reliably.</string>
+    <string name="my_profile_description">This information helps calculate your activity more accurately.</string>
+    <string name="skip">Skip</string>
 
 </resources>
