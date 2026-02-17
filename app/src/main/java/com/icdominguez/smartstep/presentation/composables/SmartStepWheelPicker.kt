@@ -62,7 +62,7 @@ fun <T> SmartStepWheelPicker(
         }
     }
 
-    LaunchedEffect(items.size) {
+    LaunchedEffect(Unit) {
         snapshotFlow { listState.isScrollInProgress }
             .distinctUntilChanged()
             .filter { isScrolling -> !isScrolling }
@@ -80,11 +80,11 @@ fun <T> SmartStepWheelPicker(
                 ) {
                     listState.animateScrollToItem(targetFirstVisible, 0)
                 }
-            }
-    }
 
-    LaunchedEffect(selectedIndex) {
-        if (items.isNotEmpty()) onSelected(selectedIndex, items[selectedIndex])
+                if (items.isNotEmpty()) {
+                    onSelected(selectedIndex, items[selectedIndex])
+                }
+            }
     }
 
     Box(
@@ -127,12 +127,16 @@ fun <T> SmartStepWheelPicker(
             }
 
             items(bottomSpacers) {
-                Box(Modifier.height(itemHeight).fillMaxWidth())
+                Box(
+                    modifier = Modifier
+                        .height(itemHeight)
+                        .fillMaxWidth()
+                )
             }
         }
     }
 
-    LaunchedEffect(items.size) {
+    LaunchedEffect(initialSelectedIndex) {
         if (items.isNotEmpty()) {
             val targetLazyIndex = selectedSlot + initialSelectedIndex.coerceIn(0, items.lastIndex)
             listState.scrollToItem((targetLazyIndex - selectedSlot).coerceIn(0, totalCount - 1))

@@ -1,6 +1,7 @@
 package com.icdominguez.smartstep.presentation.composables
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +31,7 @@ fun SmartStepPickerInput(
     title: String,
     selectedValue: String,
     isExpanded: Boolean = false,
+    onClick: () -> Unit = {},
 ) {
     val roundedCornerShape = RoundedCornerShape(10.dp)
 
@@ -43,6 +45,9 @@ fun SmartStepPickerInput(
                 width = 1.dp,
                 color = StrokeMain,
                 shape = roundedCornerShape,
+            )
+            .clickable(
+                onClick = { onClick() },
             )
             .padding(
                 vertical = 8.dp,
@@ -71,7 +76,6 @@ fun SmartStepPickerInput(
             tint = TextPrimary,
             contentDescription = "Expand/Collapse",
         )
-
     }
 }
 
