@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.personalsettings.composables
+package com.icdominguez.smartstep.presentation.screens.personalsettings.composables
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth

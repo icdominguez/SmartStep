@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.personalsettings
+package com.icdominguez.smartstep.presentation.screens.personalsettings
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,15 +35,16 @@ import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
 import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
 import com.icdominguez.smartstep.presentation.model.HeightUnit
 import com.icdominguez.smartstep.presentation.model.WeightUnit
-import com.icdominguez.smartstep.presentation.personalsettings.composables.PersonalSettingsTopBar
-import com.icdominguez.smartstep.presentation.personalsettings.dialogs.HeightPickerDialog
-import com.icdominguez.smartstep.presentation.personalsettings.dialogs.WeightPickerDialog
+import com.icdominguez.smartstep.presentation.screens.personalsettings.composables.PersonalSettingsTopBar
+import com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs.HeightPickerDialog
+import com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs.WeightPickerDialog
 import com.icdominguez.smartstep.presentation.utils.DeviceConfiguration
 
 @Composable
 fun PersonalSettingsScreen(
     state: PersonalSettingsState = PersonalSettingsState(),
     onAction: (PersonalSettingsAction) -> Unit,
+    onNavigateToHome: () -> Unit = {},
 ) {
     val genderOptions = stringArrayResource(R.array.gender_items).toList()
 
@@ -59,7 +60,7 @@ fun PersonalSettingsScreen(
     ) {
         PersonalSettingsTopBar(
             onSkipClicked = {
-                // TODO: navigate to the next screen
+                onNavigateToHome()
             }
         )
 

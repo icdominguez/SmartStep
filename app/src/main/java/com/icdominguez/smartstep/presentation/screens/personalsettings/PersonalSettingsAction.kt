@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.personalsettings
+package com.icdominguez.smartstep.presentation.screens.personalsettings
 
 import com.icdominguez.smartstep.presentation.model.HeightUnit
 import com.icdominguez.smartstep.presentation.model.WeightUnit

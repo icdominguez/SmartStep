@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.personalsettings.dialogs
+package com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
