@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.personalsettings
+package com.icdominguez.smartstep.presentation.screens.personalsettings
 
 import androidx.lifecycle.ViewModel
 import com.icdominguez.smartstep.presentation.model.HeightUnit

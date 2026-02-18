@@ -5,12 +5,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.icdominguez.smartstep.presentation.composables.DefaultScreen
 import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
-import com.icdominguez.smartstep.presentation.personalsettings.PersonalSettingsScreen
-import com.icdominguez.smartstep.presentation.personalsettings.PersonalSettingsViewModel
-import org.koin.androidx.compose.koinViewModel
+import com.icdominguez.smartstep.presentation.navigation.NavigationRoot
 
 class MainActivity : ComponentActivity() {
 
@@ -21,13 +18,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             SmartStepTheme {
-                val viewModel = koinViewModel<PersonalSettingsViewModel>()
-
                 DefaultScreen {
-                    PersonalSettingsScreen(
-                        state = viewModel.state.collectAsStateWithLifecycle().value,
-                        onAction = viewModel::onAction
-                    )
+                    NavigationRoot()
                 }
             }
         }

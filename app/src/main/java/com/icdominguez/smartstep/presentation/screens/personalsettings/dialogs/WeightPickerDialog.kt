@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.personalsettings.dialogs
+package com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
