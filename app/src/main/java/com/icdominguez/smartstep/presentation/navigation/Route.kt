@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 sealed interface Route: NavKey {
 
     @Serializable
-    data object PersonalSettings: Route, NavKey
+    data class PersonalSettings(val isFromOnBoarding: Boolean = false): Route, NavKey
 
     @Serializable
     data object Home: Route, NavKey

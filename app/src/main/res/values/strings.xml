@@ -17,10 +17,8 @@
     <string name="personal_settings">Personal settings</string>
     <string name="gender">Gender</string>
 
-    <array name="gender_items">
-        <item>Female</item>
-        <item>Male</item>
-    </array>
+    <string name="female_gender">Female</string>
+    <string name="male_gender">Male</string>
     
     <string name="height">Height</string>
     <string name="height_description">Used to calculate distance</string>

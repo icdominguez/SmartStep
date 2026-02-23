@@ -1,11 +1,12 @@
 package com.icdominguez.smartstep.presentation.screens.personalsettings
 
+import com.icdominguez.smartstep.presentation.model.Gender
 import com.icdominguez.smartstep.presentation.model.HeightUnit
 import com.icdominguez.smartstep.presentation.model.WeightUnit
 
 sealed interface PersonalSettingsAction {
     // region Gender
-    data class SetGender(val gender: String) : PersonalSettingsAction
+    data class SetGender(val gender: Gender) : PersonalSettingsAction
     // end region
 
     // region Weight
@@ -23,4 +24,7 @@ sealed interface PersonalSettingsAction {
     data object OnSetNewHeightValue : PersonalSettingsAction
     data object OnDismissHeightPicker : PersonalSettingsAction
     // end region
+
+    data object OnStartButtonClicked: PersonalSettingsAction
+    data object OnSkipButtonClicked: PersonalSettingsAction
 }

@@ -1,17 +1,80 @@
 package com.icdominguez.smartstep.presentation.screens.personalsettings
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.icdominguez.smartstep.domain.MeasurementRepository
+import com.icdominguez.smartstep.domain.UserSettings
+import com.icdominguez.smartstep.presentation.model.Gender
 import com.icdominguez.smartstep.presentation.model.HeightUnit
 import com.icdominguez.smartstep.presentation.model.WeightUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlin.math.floor
-import kotlin.math.round
-import kotlin.math.roundToInt
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
-class PersonalSettingsViewModel : ViewModel() {
+class PersonalSettingsViewModel(
+    private val userSettings: UserSettings,
+    private val measurementRepository: MeasurementRepository,
+) : ViewModel() {
     private val _state = MutableStateFlow(PersonalSettingsState())
     val state = _state.asStateFlow()
+
+    private val _event = Channel<PersonalSettingsEvent>()
+    val event = _event.receiveAsFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val userSettings = userSettings
+                .getUserSettingsData()
+                .first()
+
+            val gender = userSettings.gender.ifEmpty { Gender.FEMALE.name }
+
+            val height = if (userSettings.height == 0) 170 else userSettings.height
+            val weight = if (userSettings.weight == 0) 65 else userSettings.weight
+
+            val heightUnit = HeightUnit.fromLabel(userSettings.selectedHeightUnit)
+            val weightUnit = WeightUnit.fromLabel(userSettings.selectedWeightUnit)
+
+            val (feet, inches) =
+                measurementRepository.cmToFeetAndInches(height)
+
+            val kgToLibs =
+                measurementRepository.kgToLbs(weight)
+
+            val displayHeight = when (heightUnit) {
+                HeightUnit.CENTIMETERS -> "$height cm"
+                HeightUnit.FEET -> "${feet}ft/${inches}in"
+            }
+
+            val displayWeight = when(weightUnit) {
+                WeightUnit.KILOS -> "$weight ${WeightUnit.KILOS.label}"
+                WeightUnit.POUNDS -> {
+                    val kgToLbs = measurementRepository.kgToLbs(weight)
+                    "$kgToLbs ${WeightUnit.POUNDS.label}"
+                }
+            }
+
+            _state.value = _state.value.copy(
+                gender = Gender.valueOf(gender),
+                heightUnit = heightUnit,
+                selectedHeightUnit = heightUnit,
+                weightUnit = weightUnit,
+                selectedWeightUnit = weightUnit,
+                height = height,
+                selectedHeightValue = height,
+                selectedHeightFeet = feet,
+                selectedHeightInches = inches,
+                weight = if (weightUnit == WeightUnit.KILOS) weight else kgToLibs,
+                selectedWeightValue = if (weightUnit == WeightUnit.KILOS) userSettings.weight else kgToLibs,
+                displayHeight = displayHeight,
+                displayWeight = displayWeight,
+            )
+        }
+    }
 
     fun onAction(action: PersonalSettingsAction) {
         when (action) {
@@ -26,10 +89,12 @@ class PersonalSettingsViewModel : ViewModel() {
             is PersonalSettingsAction.OnHeightInchesValueChange -> onHeightInchesValueChange(action.newHeightInchesValue)
             is PersonalSettingsAction.OnSetNewHeightValue -> onSetNewHeightValue()
             is PersonalSettingsAction.OnDismissHeightPicker -> onDismissHeightPicker()
+            is PersonalSettingsAction.OnStartButtonClicked -> onSavePersonalSettingsClick()
+            is PersonalSettingsAction.OnSkipButtonClicked -> onSavePersonalSettingsClick()
         }
     }
 
-    private fun setGender(gender: String) {
+    private fun setGender(gender: Gender) {
         _state.value = _state.value.copy(
             gender = gender
         )
@@ -38,18 +103,18 @@ class PersonalSettingsViewModel : ViewModel() {
     private fun setWeightUnit(weightUnit: WeightUnit) {
         when (weightUnit) {
             WeightUnit.KILOS -> {
-                val poundsToKilos = (state.value.selectedWeightValue / 2.20462).roundToInt()
+                val lbsToKg = measurementRepository.lbsToKg(state.value.selectedWeightValue)
                 _state.value = _state.value.copy(
                     selectedWeightUnit = weightUnit,
-                    selectedWeightValue = poundsToKilos
+                    selectedWeightValue = lbsToKg
                 )
             }
 
             WeightUnit.POUNDS -> {
-                val kilosToPounds = (state.value.selectedWeightValue * 2.20462).roundToInt()
+                val kgToLbs =  measurementRepository.kgToLbs(state.value.selectedWeightValue)
                 _state.value = _state.value.copy(
                     selectedWeightUnit = weightUnit,
-                    selectedWeightValue = kilosToPounds
+                    selectedWeightValue = kgToLbs
                 )
             }
         }
@@ -58,7 +123,7 @@ class PersonalSettingsViewModel : ViewModel() {
     private fun setHeightUnit(heightUnit: HeightUnit) {
         when (heightUnit) {
             HeightUnit.CENTIMETERS -> {
-                val centimeters = feetInchesToCentimeters(
+                val centimeters = measurementRepository.feetAndInchesToCm(
                     state.value.selectedHeightFeet,
                     state.value.selectedHeightInches
                 )
@@ -70,7 +135,7 @@ class PersonalSettingsViewModel : ViewModel() {
             }
 
             HeightUnit.FEET -> {
-                val (feet, inches) = centimetersToFeetAndInches(state.value.selectedHeightValue)
+                val (feet, inches) = measurementRepository.cmToFeetAndInches(state.value.selectedHeightValue)
 
                 _state.value = _state.value.copy(
                     selectedHeightUnit = heightUnit,
@@ -88,9 +153,12 @@ class PersonalSettingsViewModel : ViewModel() {
     }
 
     private fun onSetNewWeightValue() {
-        _state.value = _state.value.copy(
+        val displayWeight = "${state.value.selectedWeightValue} ${state.value.selectedWeightUnit.label}"
+
+        _state.value = state.value.copy(
             weightUnit = state.value.selectedWeightUnit,
-            weight = state.value.selectedWeightValue
+            weight = state.value.selectedWeightValue,
+            displayWeight = displayWeight
         )
     }
 
@@ -124,10 +192,19 @@ class PersonalSettingsViewModel : ViewModel() {
             heightUnit = state.value.selectedHeightUnit,
             height = state.value.selectedHeightValue
         )
+
+        val displayHeight = when (state.value.selectedHeightUnit) {
+            HeightUnit.CENTIMETERS -> "${state.value.selectedHeightValue} cm"
+            HeightUnit.FEET -> "${state.value.selectedHeightFeet}ft/${state.value.selectedHeightInches}in"
+        }
+
+        _state.value = state.value.copy(
+            displayHeight = displayHeight,
+        )
     }
 
     private fun onDismissHeightPicker() {
-        val (feet, inches) = centimetersToFeetAndInches(state.value.height)
+        val (feet, inches) = measurementRepository.cmToFeetAndInches(state.value.height)
 
         _state.value = _state.value.copy(
             selectedHeightUnit = state.value.heightUnit,
@@ -137,17 +214,28 @@ class PersonalSettingsViewModel : ViewModel() {
         )
     }
 
-    private fun feetInchesToCentimeters(feet: Int, inches: Int): Int {
-        val totalInches = feet * 12 + inches
-        val centimeters = totalInches * 2.54
-        return centimeters.roundToInt()
-    }
+    private fun onSavePersonalSettingsClick() {
+        viewModelScope.launch(Dispatchers.IO) {
+            userSettings.setGender(state.value.gender.name)
+            val height = if(state.value.selectedHeightUnit == HeightUnit.FEET) {
+                measurementRepository.feetAndInchesToCm(
+                    state.value.selectedHeightFeet,
+                    state.value.selectedHeightInches
+                )
+            } else {
+                state.value.selectedHeightValue
+            }
+            userSettings.setHeight(height)
+            userSettings.setHeightUnit(state.value.selectedHeightUnit.label)
+            userSettings.setWeightUnit(state.value.selectedWeightUnit.label)
+            val weight = if(state.value.selectedWeightUnit == WeightUnit.POUNDS) {
+                measurementRepository.lbsToKg(state.value.selectedWeightValue)
+            } else {
+                state.value.selectedWeightValue
+            }
+            userSettings.setWeight(weight)
 
-    private fun centimetersToFeetAndInches(centimeters: Int): Pair<Int, Int> {
-        val totalInches = centimeters / 2.54
-        val feet = floor(totalInches / 12).roundToInt()
-        val inches = round(totalInches - feet * 12).roundToInt()
-            .coerceIn(0, 11)
-        return feet to inches
+            _event.send(PersonalSettingsEvent.OnPersonalSettingsSaved)
+        }
     }
 }
