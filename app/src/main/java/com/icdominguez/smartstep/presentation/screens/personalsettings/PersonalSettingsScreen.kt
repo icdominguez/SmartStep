@@ -20,11 +20,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.icdominguez.smartstep.R
 import com.icdominguez.smartstep.presentation.composables.SmartStepPickerInput
 import com.icdominguez.smartstep.presentation.composables.buttons.PrimaryButton
@@ -33,20 +33,26 @@ import com.icdominguez.smartstep.presentation.designsystem.BackgroundWhite
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
 import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
 import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
+import com.icdominguez.smartstep.presentation.model.Gender
 import com.icdominguez.smartstep.presentation.model.HeightUnit
 import com.icdominguez.smartstep.presentation.model.WeightUnit
 import com.icdominguez.smartstep.presentation.screens.personalsettings.composables.PersonalSettingsTopBar
 import com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs.HeightPickerDialog
 import com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs.WeightPickerDialog
 import com.icdominguez.smartstep.presentation.utils.DeviceConfiguration
+import com.icdominguez.smartstep.presentation.utils.ObserveAsEvents
+import com.icdominguez.smartstep.presentation.utils.toUiText
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun PersonalSettingsScreen(
-    state: PersonalSettingsState = PersonalSettingsState(),
-    onAction: (PersonalSettingsAction) -> Unit,
-    onNavigateToHome: () -> Unit = {},
+    viewModel: PersonalSettingsViewModel = koinViewModel(),
+    isOnBoarding: Boolean = false,
+    onNavigateToHome: () -> Unit,
+    onNavigateBack: () -> Unit
 ) {
-    val genderOptions = stringArrayResource(R.array.gender_items).toList()
+    val state = viewModel.state.collectAsStateWithLifecycle().value
+    val onAction = viewModel::onAction
 
     var showHeightDialog by remember { mutableStateOf(false) }
     var showWeightDialog by remember { mutableStateOf(false) }
@@ -54,14 +60,30 @@ fun PersonalSettingsScreen(
     val windowSizeClass = currentWindowAdaptiveInfo().windowSizeClass
     val deviceType = DeviceConfiguration.fromWindowSizeClass(windowSizeClass)
 
+    ObserveAsEvents(
+        flow = viewModel.event,
+        onEvent = { event ->
+            when (event) {
+                is PersonalSettingsEvent.OnPersonalSettingsSaved -> {
+                    if(isOnBoarding) {
+                        onNavigateToHome()
+                    } else {
+                        onNavigateBack()
+                    }
+                }
+            }
+        }
+    )
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         PersonalSettingsTopBar(
+            shouldShowSkipButton = isOnBoarding,
             onSkipClicked = {
-                onNavigateToHome()
-            }
+                onAction(PersonalSettingsAction.OnSkipButtonClicked)
+            },
         )
 
         Column(
@@ -86,14 +108,16 @@ fun PersonalSettingsScreen(
                     }
                 )
         ) {
-            Text(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp),
-                text = stringResource(R.string.my_profile_description),
-                style = LocalSmartStepTypography.current.bodyLargeRegular,
-                textAlign = TextAlign.Center,
-                color = TextPrimary,
-            )
+            if(isOnBoarding) {
+                Text(
+                    modifier = Modifier
+                        .padding(horizontal = 20.dp),
+                    text = stringResource(R.string.my_profile_description),
+                    style = LocalSmartStepTypography.current.bodyLargeRegular,
+                    textAlign = TextAlign.Center,
+                    color = TextPrimary,
+                )
+            }
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -113,46 +137,48 @@ fun PersonalSettingsScreen(
                     modifier = Modifier
                         .fillMaxWidth(),
                     title = stringResource(R.string.gender),
-                    options = genderOptions,
-                    selectedOption = state.gender.ifEmpty { genderOptions[0] },
+                    options = Gender.entries,
+                    selectedOption = state.gender,
                     onOptionSelected = {
                         onAction(PersonalSettingsAction.SetGender(it))
-                    }
+                    },
+                    optionLabel = { it.toUiText() },
                 )
 
                 SmartStepPickerInput(
                     modifier = Modifier
                         .fillMaxWidth(),
                     title = stringResource(R.string.height),
-                    selectedValue = when (state.heightUnit) {
-                        HeightUnit.CENTIMETERS -> "${state.height} ${state.heightUnit.label}"
-                        HeightUnit.FEET -> "${state.selectedHeightFeet}ft ${state.selectedHeightInches}in"
-                    },
-                    onClick = {
-                        showHeightDialog = true
-                    }
+                    selectedValue = state.displayHeight,
+                    onClick = { showHeightDialog = true }
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Spacer(
+                    modifier = Modifier
+                        .height(8.dp)
+                )
 
                 SmartStepPickerInput(
                     modifier = Modifier
                         .fillMaxWidth(),
                     title = stringResource(R.string.weight),
-                    selectedValue = "${state.weight} ${state.weightUnit.label}",
-                    onClick = {
-                        showWeightDialog = true
-                    }
+                    selectedValue = state.displayWeight,
+                    onClick = { showWeightDialog = true }
                 )
             }
 
-            Spacer(modifier = Modifier.weight(1f))
+            Spacer(
+                modifier = Modifier
+                    .weight(1f)
+            )
 
             PrimaryButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                text = stringResource(R.string.button_start),
-                onClick = {}
+                text = stringResource(if(isOnBoarding) R.string.button_start else R.string.button_save),
+                onClick = {
+                    onAction(PersonalSettingsAction.OnStartButtonClicked)
+                }
             )
         }
     }
@@ -213,7 +239,8 @@ fun PersonalSettingsScreen(
 fun PersonalSettingsScreenPreview() {
     SmartStepTheme {
         PersonalSettingsScreen(
-            onAction = {}
+            onNavigateToHome = {},
+            onNavigateBack = {}
         )
     }
 }

@@ -17,8 +17,10 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun NavigationRoot(
     modifier: Modifier = Modifier,
+    isOnBoardingCompleted: Boolean,
 ) {
-    val backStack = rememberNavBackStack(Route.PersonalSettings)
+    val startDestination = if (isOnBoardingCompleted) Route.Home else Route.PersonalSettings(true)
+    val backStack = rememberNavBackStack(startDestination)
 
     NavDisplay(
         modifier = modifier,
@@ -34,11 +36,14 @@ fun NavigationRoot(
                         val viewModel = koinViewModel<PersonalSettingsViewModel>()
 
                         PersonalSettingsScreen(
-                            state = viewModel.state.collectAsStateWithLifecycle().value,
-                            onAction = viewModel::onAction,
+                            viewModel = viewModel,
                             onNavigateToHome = {
                                 backStack.add(Route.Home)
-                                backStack.remove(Route.PersonalSettings)
+                                backStack.remove(Route.PersonalSettings())
+                            },
+                            isOnBoarding = key.isFromOnBoarding,
+                            onNavigateBack = {
+                                backStack.remove(Route.PersonalSettings())
                             }
                         )
                     }
@@ -51,9 +56,8 @@ fun NavigationRoot(
                             state = viewModel.state.collectAsStateWithLifecycle().value,
                             onAction = viewModel::onAction,
                             onNavigateToPersonalSettings = {
-                                backStack.add(Route.PersonalSettings)
+                                backStack.add(Route.PersonalSettings())
                             },
-
                         )
                     }
                 }

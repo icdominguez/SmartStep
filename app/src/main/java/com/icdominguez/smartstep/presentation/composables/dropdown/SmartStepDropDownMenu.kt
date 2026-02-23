@@ -18,15 +18,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.presentation.composables.SmartStepPickerInput
 import com.icdominguez.smartstep.presentation.designsystem.BackgroundWhite
+import com.icdominguez.smartstep.presentation.model.Gender
+import com.icdominguez.smartstep.presentation.utils.UiText
+import com.icdominguez.smartstep.presentation.utils.toUiText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SmartStepDropDownMenu(
+fun <T> SmartStepDropDownMenu(
     modifier: Modifier = Modifier,
     title: String,
-    options: List<String>,
-    selectedOption: String,
-    onOptionSelected: (String) -> Unit,
+    options: List<T>,
+    selectedOption: T,
+    onOptionSelected: (T) -> Unit,
+    optionLabel: (T) -> UiText,
 ) {
     var isExpanded by remember { mutableStateOf(false) }
 
@@ -46,7 +50,7 @@ fun SmartStepDropDownMenu(
         ) {
             SmartStepPickerInput(
                 title = title,
-                selectedValue = selectedOption,
+                selectedValue = optionLabel(selectedOption).asString(),
                 isExpanded = isExpanded,
             )
         }
@@ -67,7 +71,7 @@ fun SmartStepDropDownMenu(
             ) {
                 options.map { option ->
                     SmartStepDropDownItem(
-                        text = option,
+                        text = optionLabel(option).asString(),
                         isSelected = option == selectedOption,
                         onClick = {
                             onOptionSelected(option)
@@ -85,8 +89,9 @@ fun SmartStepDropDownMenu(
 private fun SmartStepDropDownMenuPreview() {
     SmartStepDropDownMenu(
         title = "Gender",
-        options = listOf("Male", "Female"),
-        selectedOption = "Male",
-        onOptionSelected = {}
+        options = Gender.entries,
+        selectedOption = Gender.MALE,
+        onOptionSelected = {},
+        optionLabel = { Gender.FEMALE.toUiText() }
     )
 }
