@@ -31,7 +31,7 @@
     <string name="modal_bottom_sheet_1_button">Allow access</string>
 
     <string name="modal_bottom_sheet_2_title">Enable access manually</string>
-    <string name="modal_bottom_sheet_2_description">Enable access manually</string>
+    <string name="modal_bottom_sheet_2_description">To track your steps, please enable the permission in your device settings.</string>
 
     <string name="modal_bottom_sheet_2_step_1">1. Open Permissions</string>
     <string name="modal_bottom_sheet_2_step_2">2. Tap Physical activity</string>
