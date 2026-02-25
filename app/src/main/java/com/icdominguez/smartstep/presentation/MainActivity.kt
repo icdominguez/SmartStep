@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import com.icdominguez.smartstep.presentation.composables.DefaultScreen
+import com.icdominguez.smartstep.presentation.designsystem.composables.DefaultScreen
 import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
 import com.icdominguez.smartstep.presentation.navigation.NavigationRoot
 import org.koin.androidx.viewmodel.ext.android.viewModel

@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.screens.home.composables
+package com.icdominguez.smartstep.presentation.screens.home.composables.dialogs
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -17,8 +16,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.composables.SmartStepCustomDialog
-import com.icdominguez.smartstep.presentation.composables.buttons.PrimaryButton
+import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepCustomDialog
+import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
 import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
 
@@ -33,8 +32,7 @@ fun ExitDialog(
     ) {
         Column(
             modifier = modifier
-                .fillMaxWidth()
-                .padding(all = 24.dp),
+                .fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {

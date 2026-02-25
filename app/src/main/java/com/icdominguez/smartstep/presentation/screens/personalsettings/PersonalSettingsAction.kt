@@ -1,8 +1,8 @@
 package com.icdominguez.smartstep.presentation.screens.personalsettings
 
-import com.icdominguez.smartstep.presentation.model.Gender
-import com.icdominguez.smartstep.presentation.model.HeightUnit
-import com.icdominguez.smartstep.presentation.model.WeightUnit
+import com.icdominguez.smartstep.domain.model.Gender
+import com.icdominguez.smartstep.domain.model.HeightUnit
+import com.icdominguez.smartstep.domain.model.WeightUnit
 
 sealed interface PersonalSettingsAction {
     // region Gender

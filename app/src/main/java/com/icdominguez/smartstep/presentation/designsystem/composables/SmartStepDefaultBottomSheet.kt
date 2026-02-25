@@ -1,5 +1,6 @@
-package com.icdominguez.smartstep.presentation.composables
+package com.icdominguez.smartstep.presentation.designsystem.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -47,7 +48,8 @@ fun SmartStepDefaultBottonSheet(
     ) {
         Box(
             modifier = Modifier
-                .padding(16.dp),
+                .padding(16.dp)
+                .background(color = BackgroundSecondary),
         ) {
             content()
         }

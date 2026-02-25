@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.composables
+package com.icdominguez.smartstep.presentation.designsystem.composables
 
 import android.app.Activity
 import androidx.compose.foundation.layout.Box

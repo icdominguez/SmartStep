@@ -1,7 +1,6 @@
-package com.icdominguez.smartstep.presentation.screens.home.composables
+package com.icdominguez.smartstep.presentation.screens.home.composables.permissions
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,23 +17,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.composables.buttons.PrimaryButton
-import com.icdominguez.smartstep.presentation.designsystem.BackgroundWhite
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
 import com.icdominguez.smartstep.presentation.designsystem.StrokeMain
 import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
 
 @Composable
-fun ActivityPermissionExplanationContent(
+fun AccessToMonitorsSensorContent(
     modifier: Modifier = Modifier,
     onContinueButtonClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .background(color = BackgroundWhite)
-            .padding(all = 16.dp),
+        modifier = modifier,
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -77,6 +75,16 @@ fun ActivityPermissionExplanationContent(
             onClick = {
                 onContinueButtonClick()
             }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun AccessToMonitorsSensorContentPreview() {
+    SmartStepTheme {
+        AccessToMonitorsSensorContent(
+            onContinueButtonClick = {}
         )
     }
 }

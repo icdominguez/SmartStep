@@ -1,9 +1,7 @@
-package com.icdominguez.smartstep.presentation.screens.home.composables
+package com.icdominguez.smartstep.presentation.designsystem.composables
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import com.icdominguez.smartstep.presentation.composables.SmartStepCustomDialog
-import com.icdominguez.smartstep.presentation.composables.SmartStepDefaultBottonSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

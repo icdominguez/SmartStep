@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.model
+package com.icdominguez.smartstep.domain.model
 
 enum class HeightUnit(val label: String) {
     CENTIMETERS("cm"),

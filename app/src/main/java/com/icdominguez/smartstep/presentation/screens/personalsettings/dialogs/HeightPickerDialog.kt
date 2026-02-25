@@ -14,16 +14,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.composables.SmartStepCustomDialog
-import com.icdominguez.smartstep.presentation.composables.SmartStepWheelPicker
-import com.icdominguez.smartstep.presentation.composables.buttons.TextButton
-import com.icdominguez.smartstep.presentation.composables.switcher.UnitSwitcher
+import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepCustomDialog
+import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepWheelPicker
+import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.TextButton
+import com.icdominguez.smartstep.presentation.designsystem.composables.switcher.UnitSwitcher
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
 import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
 import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
-import com.icdominguez.smartstep.presentation.model.HeightUnit
+import com.icdominguez.smartstep.domain.model.HeightUnit
 
 private const val MIN_HEIGHT = 60
 private const val MAX_HEIGHT = 250
@@ -46,6 +47,7 @@ fun HeightPickerDialog(
     onConfirm: () -> Unit,
 ) {
     SmartStepCustomDialog(
+        showPadding = false,
         onDismiss = {
             onDismiss()
         }
@@ -93,6 +95,9 @@ fun HeightPickerDialog(
                     ) { item, isSelected ->
                         Text(
                             text = "$item  ${selectedHeightUnit.label}",
+                            style = LocalSmartStepTypography.current.titleMedium.copy(
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                            ),
                             color = if (isSelected) TextPrimary else TextSecondary
                         )
                     }
@@ -121,6 +126,9 @@ fun HeightPickerDialog(
                             ) {
                                 Text(
                                     text = "$item",
+                                    style = LocalSmartStepTypography.current.titleMedium.copy(
+                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                                    ),
                                     color = if (isSelected) TextPrimary else TextSecondary
                                 )
 
@@ -132,6 +140,9 @@ fun HeightPickerDialog(
                                 if (isSelected) {
                                     Text(
                                         text = "ft",
+                                        style = LocalSmartStepTypography.current.titleMedium.copy(
+                                            fontWeight = FontWeight.SemiBold,
+                                        ),
                                         color = TextPrimary
                                     )
                                 }
@@ -157,6 +168,9 @@ fun HeightPickerDialog(
                             ) {
                                 Text(
                                     text = "$item",
+                                    style = LocalSmartStepTypography.current.titleMedium.copy(
+                                        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                                    ),
                                     color = if (isSelected) TextPrimary else TextSecondary
                                 )
 
@@ -168,6 +182,9 @@ fun HeightPickerDialog(
                                 if (isSelected) {
                                     Text(
                                         text = "in",
+                                        style = LocalSmartStepTypography.current.titleMedium.copy(
+                                            fontWeight = FontWeight.SemiBold,
+                                        ),
                                         color = TextPrimary
                                     )
                                 }

@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.screens.home.composables
+package com.icdominguez.smartstep.presentation.screens.home.composables.permissions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -13,7 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.composables.buttons.PrimaryButton
+import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
 import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
 

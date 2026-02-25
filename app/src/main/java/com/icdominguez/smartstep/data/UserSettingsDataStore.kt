@@ -56,15 +56,15 @@ class UserSettingsDataStore(
         }
     }
 
-    override suspend fun setBatteryOptIgnored(ignored: Boolean) {
+    override suspend fun setBackgroundAccessEnabled(ignored: Boolean) {
         dataStore.edit { preferences ->
-            preferences[BATTERY_OPT_IGNORED_KEY] = ignored
+            preferences[BACKGROUND_ACCESS_ENABLED_KEY] = ignored
         }
     }
 
-    override fun getBatteryOptIgnored(): Flow<Boolean?> {
+    override fun getBackgroundAccessEnabled(): Flow<Boolean?> {
         return dataStore.data.map { preferences ->
-            preferences[BATTERY_OPT_IGNORED_KEY]
+            preferences[BACKGROUND_ACCESS_ENABLED_KEY]
         }
     }
 
@@ -86,7 +86,7 @@ class UserSettingsDataStore(
         private val WEIGHT_KEY = intPreferencesKey("weight")
         private val SELECTED_HEIGHT_UNIT_KEY = stringPreferencesKey("selected_height_unit")
         private val SELECTED_WEIGHT_UNIT_KEY = stringPreferencesKey("selected_weight_unit")
-        private val BATTERY_OPT_IGNORED_KEY = booleanPreferencesKey("battery_opt_ignored")
+        private val BACKGROUND_ACCESS_ENABLED_KEY = booleanPreferencesKey("background_access_enabled")
         private val STEP_GOAL_KEY = intPreferencesKey("step_goal")
     }
 }

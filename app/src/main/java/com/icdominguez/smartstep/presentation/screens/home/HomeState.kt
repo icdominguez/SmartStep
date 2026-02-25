@@ -4,12 +4,12 @@ data class HomeState(
     val steps: Int = 0,
     val stepGoal: Int = 0,
     val selectedStepGoal: Int = 0,
-    val isBatteryOptIgnored: Boolean? = null,
+    val isBackgroundAccessEnabled: Boolean? = null,
     // region Dialogs
-    val showPermissionExplanationSheet: Boolean = false,
-    val showManualPermissionSheet: Boolean = false,
-    val showBatteryRecommendedDialog: Boolean = false,
-    val showStepGoalModalBottomSheet: Boolean = false,
+    val showMotionSensorsDialog: Boolean = false,
+    val showEnableAccessManuallyDialog: Boolean = false,
+    val showBackgroundAccessRecommendedDialog: Boolean = false,
+    val showStepGoalDialog: Boolean = false,
     val showExitDialog: Boolean = false,
     // end region
 )

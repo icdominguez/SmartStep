@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.composables.dropdown
+package com.icdominguez.smartstep.presentation.designsystem.composables.dropdown
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,9 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.icdominguez.smartstep.presentation.composables.SmartStepPickerInput
+import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepPickerInput
 import com.icdominguez.smartstep.presentation.designsystem.BackgroundWhite
-import com.icdominguez.smartstep.presentation.model.Gender
+import com.icdominguez.smartstep.domain.model.Gender
 import com.icdominguez.smartstep.presentation.utils.UiText
 import com.icdominguez.smartstep.presentation.utils.toUiText
 

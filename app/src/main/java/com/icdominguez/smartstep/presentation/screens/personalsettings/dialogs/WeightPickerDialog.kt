@@ -11,16 +11,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.composables.SmartStepCustomDialog
-import com.icdominguez.smartstep.presentation.composables.SmartStepWheelPicker
-import com.icdominguez.smartstep.presentation.composables.buttons.TextButton
-import com.icdominguez.smartstep.presentation.composables.switcher.UnitSwitcher
+import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepCustomDialog
+import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepWheelPicker
+import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.TextButton
+import com.icdominguez.smartstep.presentation.designsystem.composables.switcher.UnitSwitcher
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
 import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
 import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
-import com.icdominguez.smartstep.presentation.model.WeightUnit
+import com.icdominguez.smartstep.domain.model.WeightUnit
 
 private const val MIN_WEIGHT = 40
 private const val MAX_WEIGHT = 250
@@ -43,6 +44,7 @@ fun WeightPickerDialog(
 ) {
     SmartStepCustomDialog(
         modifier = modifier,
+        showPadding = false,
         onDismiss = {
             onDismiss()
         }
@@ -89,6 +91,9 @@ fun WeightPickerDialog(
                     ) { item, isSelected ->
                         Text(
                             text = "$item ${selectedWeightUnit.label}",
+                            style = LocalSmartStepTypography.current.titleMedium.copy(
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                            ),
                             color = if (isSelected) TextPrimary else TextSecondary
                         )
                     }
@@ -103,6 +108,9 @@ fun WeightPickerDialog(
                     ) { item, isSelected ->
                         Text(
                             text = "$item ${selectedWeightUnit.label}",
+                            style = LocalSmartStepTypography.current.titleMedium.copy(
+                                fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal
+                            ),
                             color = if (isSelected) TextPrimary else TextSecondary
                         )
                     }

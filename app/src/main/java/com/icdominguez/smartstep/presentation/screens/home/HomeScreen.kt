@@ -11,10 +11,13 @@ import android.os.PowerManager
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +28,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -35,17 +39,16 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.composables.SmartStepCustomDialog
-import com.icdominguez.smartstep.presentation.composables.SmartStepDefaultBottonSheet
 import com.icdominguez.smartstep.presentation.designsystem.BackgroundSecondary
-import com.icdominguez.smartstep.presentation.screens.home.composables.ActivityPermissionExplanationContent
-import com.icdominguez.smartstep.presentation.screens.home.composables.AdaptiveOverlay
-import com.icdominguez.smartstep.presentation.screens.home.composables.BackgroundAccessRecommendedContent
-import com.icdominguez.smartstep.presentation.screens.home.composables.ExitDialog
+import com.icdominguez.smartstep.presentation.designsystem.composables.AdaptiveOverlay
 import com.icdominguez.smartstep.presentation.screens.home.composables.HomeTopBar
-import com.icdominguez.smartstep.presentation.screens.home.composables.ManualPermissionContent
 import com.icdominguez.smartstep.presentation.screens.home.composables.NavigationDrawerItem
 import com.icdominguez.smartstep.presentation.screens.home.composables.SetStepGoalContent
+import com.icdominguez.smartstep.presentation.screens.home.composables.dialogs.ExitDialog
+import com.icdominguez.smartstep.presentation.screens.home.composables.permissions.AccessToMonitorsSensorContent
+import com.icdominguez.smartstep.presentation.screens.home.composables.permissions.BackgroundAccessRecommendedContent
+import com.icdominguez.smartstep.presentation.screens.home.composables.permissions.ManualPermissionContent
+import com.icdominguez.smartstep.presentation.screens.home.composables.stepsinformationcard.StepsInformationCard
 import com.icdominguez.smartstep.presentation.utils.DeviceConfiguration
 import com.icdominguez.smartstep.presentation.utils.ObserveAsEvents
 import kotlinx.coroutines.launch
@@ -109,7 +112,7 @@ fun HomeScreen(
     ) {
         val pm = context.getSystemService(Context.POWER_SERVICE) as PowerManager
         val isIgnoring = pm.isIgnoringBatteryOptimizations(context.packageName)
-        onAction(HomeAction.OnIgnoreBatteryOptimizationsResponse(isIgnoring))
+        onAction(HomeAction.OnBackgroundAccessPermissionResponse(isIgnoring))
     }
     // end region
 
@@ -137,11 +140,14 @@ fun HomeScreen(
                 is HomeEvent.RequestActivityRecognition -> {
                     activityRecognitionLauncher.launch(Manifest.permission.ACTIVITY_RECOGNITION)
                 }
-                is HomeEvent.RequestIgnoreBatteryOptimizations -> {
+                is HomeEvent.RequestBackgroundAccess -> {
                     val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
                         data = "package:${context.packageName}".toUri()
                     }
                     ignoreBatteryOptimizationsLauncher.launch(intent)
+                }
+                is HomeEvent.RequestAppClose -> {
+                    activity.finishAndRemoveTask()
                 }
             }
         }
@@ -163,7 +169,7 @@ fun HomeScreen(
                         .fillMaxWidth(if (deviceType.isTablet()) 1f else 0.75f)
                         .fillMaxSize()
                 ) {
-                    if(state.isBatteryOptIgnored != true) {
+                    if(state.isBackgroundAccessEnabled != true) {
                         NavigationDrawerItem(
                             text = stringResource(R.string.menu_fix_step_issue),
                             onClick = {
@@ -219,42 +225,49 @@ fun HomeScreen(
                     }
                 }
             )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        horizontal = 16.dp
+                    ),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                StepsInformationCard(
+                    modifier = Modifier
+                        .then(
+                            if (deviceType.isTablet()) Modifier.width(
+                                394.dp
+                            ) else Modifier
+                                .fillMaxWidth()
+                        ),
+                    steps = state.steps,
+                    stepGoal = state.stepGoal,
+                    progress = state.steps.toFloat() / state.stepGoal
+                )
+            }
         }
     }
 
-    if (state.showStepGoalModalBottomSheet) {
-        if (deviceType.isTablet()) {
-            SmartStepCustomDialog(
-                onDismiss = {}
-            ) {
-                SetStepGoalContent(
-                    stepGoal = state.stepGoal,
-                    onStepGoalChange = {
-                        onAction(HomeAction.OnStepGoalChange(it))
-                    },
-                    onConfirm = {
-                        onAction(HomeAction.OnStepGoalConfirm)
-                    },
-                    onDismiss = {
-                        onAction(HomeAction.OnStepGoalDismiss)
-                    }
-                )
-            }
-        } else {
-            SmartStepDefaultBottonSheet {
-                SetStepGoalContent(
-                    stepGoal = state.stepGoal,
-                    onStepGoalChange = {
-                        onAction(HomeAction.OnStepGoalChange(it))
-                    },
-                    onConfirm = {
-                        onAction(HomeAction.OnStepGoalConfirm)
-                    },
-                    onDismiss = {
-                        onAction(HomeAction.OnStepGoalDismiss)
-                    }
-                )
-            }
+    if (state.showStepGoalDialog) {
+        AdaptiveOverlay(
+            isTablet = isTablet,
+            onDismiss = { }
+        ) {
+            SetStepGoalContent(
+                stepGoal = state.stepGoal,
+                onStepGoalChange = {
+                    onAction(HomeAction.OnStepGoalChange(it))
+                },
+                onConfirm = {
+                    onAction(HomeAction.OnStepGoalConfirm)
+                },
+                onDismiss = {
+                    onAction(HomeAction.OnStepGoalDismiss)
+                }
+            )
         }
     }
 
@@ -265,12 +278,12 @@ fun HomeScreen(
         )
     }
 
-    if(state.showPermissionExplanationSheet) {
+    if(state.showMotionSensorsDialog) {
         AdaptiveOverlay(
             isTablet = isTablet,
             onDismiss = { }
         ) {
-            ActivityPermissionExplanationContent(
+            AccessToMonitorsSensorContent(
                 onContinueButtonClick = {
                     onAction(HomeAction.OnActivityRecognitionRequest)
                 }
@@ -278,7 +291,7 @@ fun HomeScreen(
         }
     }
 
-    if(state.showManualPermissionSheet) {
+    if(state.showEnableAccessManuallyDialog) {
         AdaptiveOverlay(
             isTablet = isTablet,
             onDismiss = { }
@@ -291,7 +304,7 @@ fun HomeScreen(
         }
     }
 
-    if(state.showBatteryRecommendedDialog) {
+    if(state.showBackgroundAccessRecommendedDialog) {
         AdaptiveOverlay(
             isTablet = isTablet,
             dismissOnClickOutside = true,
