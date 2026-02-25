@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.composables.switcher
+package com.icdominguez.smartstep.presentation.designsystem.composables.switcher
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

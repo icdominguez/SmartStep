@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
 import com.icdominguez.smartstep.data.MeasurementRepositoryImpl
+import com.icdominguez.smartstep.data.StepCounterManager
 import com.icdominguez.smartstep.data.UserSettingsDataStore
 import com.icdominguez.smartstep.domain.MeasurementRepository
 import com.icdominguez.smartstep.domain.UserSettings
@@ -31,6 +32,10 @@ val appModule = module {
 
     single<MeasurementRepository> {
         MeasurementRepositoryImpl()
+    }
+
+    single {
+        StepCounterManager(androidContext())
     }
 
     viewModelOf(::MainViewModel)

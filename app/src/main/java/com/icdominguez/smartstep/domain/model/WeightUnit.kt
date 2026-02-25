@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.model
+package com.icdominguez.smartstep.domain.model
 
 enum class WeightUnit(val label: String) {
     KILOS("kg"),

@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.composables
+package com.icdominguez.smartstep.presentation.designsystem.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

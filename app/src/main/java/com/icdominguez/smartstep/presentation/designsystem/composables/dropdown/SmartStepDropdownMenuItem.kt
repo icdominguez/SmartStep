@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.composables.dropdown
+package com.icdominguez.smartstep.presentation.designsystem.composables.dropdown
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

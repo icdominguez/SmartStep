@@ -1,5 +1,6 @@
-package com.icdominguez.smartstep.presentation.composables
+package com.icdominguez.smartstep.presentation.designsystem.composables
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -18,6 +19,7 @@ fun SmartStepCustomDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     dismissOnClickOutside: Boolean = false,
+    showPadding: Boolean = true,
     content: @Composable () -> Unit
 ) {
     Dialog(
@@ -37,7 +39,10 @@ fun SmartStepCustomDialog(
         ) {
             Box(
                 modifier = Modifier
-                    .padding(24.dp)
+                    .padding(all = if(showPadding) 24.dp else 0.dp)
+                    .background(
+                        color = BackgroundSecondary
+                    )
             ) {
                 content()
             }

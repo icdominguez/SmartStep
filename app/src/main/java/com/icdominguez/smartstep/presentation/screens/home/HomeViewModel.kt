@@ -2,6 +2,7 @@ package com.icdominguez.smartstep.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.icdominguez.smartstep.data.StepCounterManager
 import com.icdominguez.smartstep.domain.UserSettings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
@@ -11,7 +12,8 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
-    private val userSettings: UserSettings
+    private val userSettings: UserSettings,
+    private val stepCounterManager: StepCounterManager,
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
@@ -21,9 +23,10 @@ class HomeViewModel(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            userSettings.getBatteryOptIgnored().collect { isBatteryOptIgnored ->
+            userSettings.getBackgroundAccessEnabled().collect { isBackgroundAccessEnabled ->
+                if(isBackgroundAccessEnabled == true) stepCounterManager.start()
                 _state.value = _state.value.copy(
-                    isBatteryOptIgnored = isBatteryOptIgnored
+                    isBackgroundAccessEnabled = isBackgroundAccessEnabled
                 )
             }
         }
@@ -36,38 +39,47 @@ class HomeViewModel(
                 )
             }
         }
+
+        viewModelScope.launch {
+            stepCounterManager.steps.collect { steps ->
+                _state.value = _state.value.copy(
+                    steps = steps
+                )
+            }
+        }
     }
 
     fun onAction(action: HomeAction) {
         when(action) {
+            // region Permissions
             is HomeAction.OnActivityRecognitionChecked -> onActivityRecognitionPermissionChecked(action.isGranted)
             is HomeAction.OnActivityRecognitionGranted -> onActivityRecognitionGranted()
             is HomeAction.OnActivityRecognitionDenied -> onActivityRecognitionDenied(action.showRationale)
             is HomeAction.OnActivityRecognitionRequest -> onActivityRecognitionRequest()
-
             is HomeAction.OnOpenManualSettings -> onOpenManualSettings()
-
-            is HomeAction.OnIgnoreBatteryOptimizationsResponse -> onIgnoreBatteryOptimizationResponse(action.isIgnored)
-
+            is HomeAction.OnBackgroundAccessPermissionResponse -> onBackgroundAccessPermissionResponse(action.isEnabled)
+            is HomeAction.OnContinueBackgroundAccess -> onContinueBackgroundAccess()
+            // end region
+            // region StepGoal
             is HomeAction.OnShowStepGoalDialog -> onShowStepGoalDialog()
             is HomeAction.OnStepGoalChange -> onStepGoalChange(action.stepGoal)
             is HomeAction.OnStepGoalConfirm -> onStepGoalConfirm()
             is HomeAction.OnStepGoalDismiss -> onStepGoalDismiss()
-
-            is HomeAction.OnContinueBackgroundAccess -> onContinueBackgroundAccess()
-
+            // end region
+            // region Exit
             is HomeAction.OnExitClick -> onExitClick()
             is HomeAction.OnExitConfirm -> onExitConfirm()
             is HomeAction.OnExitDismiss -> onExitDismiss()
+            // end region
         }
     }
 
     private fun onActivityRecognitionPermissionChecked(isGranted: Boolean) {
         viewModelScope.launch {
             if (isGranted) {
-                if (state.value.isBatteryOptIgnored == null) {
+                if (state.value.isBackgroundAccessEnabled == null) {
                     _state.value = _state.value.copy(
-                        showBatteryRecommendedDialog = true
+                        showBackgroundAccessRecommendedDialog = true
                     )
                 }
             } else {
@@ -78,25 +90,25 @@ class HomeViewModel(
 
     private fun onActivityRecognitionGranted() {
         _state.value = _state.value.copy(
-            showBatteryRecommendedDialog = true
+            showBackgroundAccessRecommendedDialog = true
         )
     }
 
     private fun onActivityRecognitionDenied(shouldShowRationale: Boolean) {
         if(shouldShowRationale) {
             _state.value = _state.value.copy(
-                showPermissionExplanationSheet = true
+                showMotionSensorsDialog = true
             )
         } else {
             _state.value = _state.value.copy(
-                showManualPermissionSheet = true
+                showEnableAccessManuallyDialog = true
             )
         }
     }
 
     private fun onActivityRecognitionRequest() {
         _state.value = _state.value.copy(
-            showPermissionExplanationSheet = false
+            showMotionSensorsDialog = false
         )
 
         viewModelScope.launch {
@@ -106,7 +118,7 @@ class HomeViewModel(
 
     private fun onOpenManualSettings() {
         _state.value = _state.value.copy(
-            showManualPermissionSheet = false
+            showEnableAccessManuallyDialog = false
         )
 
         viewModelScope.launch {
@@ -114,16 +126,16 @@ class HomeViewModel(
         }
     }
 
-    private fun onIgnoreBatteryOptimizationResponse(isIgnored: Boolean) {
+    private fun onBackgroundAccessPermissionResponse(isEnabled: Boolean) {
         viewModelScope.launch {
-            userSettings.setBatteryOptIgnored(isIgnored)
+            userSettings.setBackgroundAccessEnabled(isEnabled)
         }
     }
 
     private fun onStepGoalDismiss() {
         viewModelScope.launch {
             _state.value = _state.value.copy(
-                showStepGoalModalBottomSheet = false,
+                showStepGoalDialog = false,
                 selectedStepGoal = state.value.stepGoal
             )
         }
@@ -133,7 +145,7 @@ class HomeViewModel(
         viewModelScope.launch {
             userSettings.setStepGoal(state.value.selectedStepGoal)
             _state.value = _state.value.copy(
-                showStepGoalModalBottomSheet = false,
+                showStepGoalDialog = false,
             )
         }
     }
@@ -146,17 +158,17 @@ class HomeViewModel(
 
     private fun onShowStepGoalDialog() {
         _state.value = _state.value.copy(
-            showStepGoalModalBottomSheet = true
+            showStepGoalDialog = true
         )
     }
 
     private fun onContinueBackgroundAccess() {
         _state.value = _state.value.copy(
-            showBatteryRecommendedDialog = false
+            showBackgroundAccessRecommendedDialog = false
         )
 
         viewModelScope.launch {
-            _event.send(HomeEvent.RequestIgnoreBatteryOptimizations)
+            _event.send(HomeEvent.RequestBackgroundAccess)
         }
     }
 
@@ -167,9 +179,15 @@ class HomeViewModel(
     }
 
     private fun onExitConfirm() {
+        stepCounterManager.stop()
+
         _state.value = _state.value.copy(
             showExitDialog = false
         )
+
+        viewModelScope.launch {
+            _event.send(HomeEvent.RequestAppClose)
+        }
     }
 
     private fun onExitDismiss() {
