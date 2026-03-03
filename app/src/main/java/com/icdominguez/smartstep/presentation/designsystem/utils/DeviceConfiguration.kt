@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.utils
+package com.icdominguez.smartstep.presentation.designsystem.utils
 
 import androidx.compose.material3.adaptive.currentWindowAdaptiveInfo
 import androidx.compose.runtime.Composable

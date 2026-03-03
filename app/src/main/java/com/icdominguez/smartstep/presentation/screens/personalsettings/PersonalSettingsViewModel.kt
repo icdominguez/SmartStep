@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.icdominguez.smartstep.domain.MeasurementRepository
 import com.icdominguez.smartstep.domain.UserSettings
+import com.icdominguez.smartstep.domain.UserSettingsData
 import com.icdominguez.smartstep.domain.model.Gender
 import com.icdominguez.smartstep.domain.model.HeightUnit
 import com.icdominguez.smartstep.domain.model.WeightUnit
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,54 +26,7 @@ class PersonalSettingsViewModel(
     val event = _event.receiveAsFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            val userSettings = userSettings
-                .getUserSettingsData()
-                .first()
-
-            val gender = userSettings.gender.ifEmpty { Gender.FEMALE.name }
-
-            val height = if (userSettings.height == 0) 170 else userSettings.height
-            val weight = if (userSettings.weight == 0) 65 else userSettings.weight
-
-            val heightUnit = HeightUnit.fromLabel(userSettings.selectedHeightUnit)
-            val weightUnit = WeightUnit.fromLabel(userSettings.selectedWeightUnit)
-
-            val (feet, inches) =
-                measurementRepository.cmToFeetAndInches(height)
-
-            val kgToLibs =
-                measurementRepository.kgToLbs(weight)
-
-            val displayHeight = when (heightUnit) {
-                HeightUnit.CENTIMETERS -> "$height cm"
-                HeightUnit.FEET -> "${feet}ft/${inches}in"
-            }
-
-            val displayWeight = when(weightUnit) {
-                WeightUnit.KILOS -> "$weight ${WeightUnit.KILOS.label}"
-                WeightUnit.POUNDS -> {
-                    val kgToLbs = measurementRepository.kgToLbs(weight)
-                    "$kgToLbs ${WeightUnit.POUNDS.label}"
-                }
-            }
-
-            _state.value = _state.value.copy(
-                gender = Gender.valueOf(gender),
-                heightUnit = heightUnit,
-                selectedHeightUnit = heightUnit,
-                weightUnit = weightUnit,
-                selectedWeightUnit = weightUnit,
-                height = height,
-                selectedHeightValue = height,
-                selectedHeightFeet = feet,
-                selectedHeightInches = inches,
-                weight = if (weightUnit == WeightUnit.KILOS) weight else kgToLibs,
-                selectedWeightValue = if (weightUnit == WeightUnit.KILOS) userSettings.weight else kgToLibs,
-                displayHeight = displayHeight,
-                displayWeight = displayWeight,
-            )
-        }
+        loadUserSettings()
     }
 
     fun onAction(action: PersonalSettingsAction) {
@@ -92,6 +45,61 @@ class PersonalSettingsViewModel(
             is PersonalSettingsAction.OnStartButtonClicked -> onSavePersonalSettingsClick()
             is PersonalSettingsAction.OnSkipButtonClicked -> onSavePersonalSettingsClick()
         }
+    }
+
+    private fun loadUserSettings() {
+        viewModelScope.launch {
+            val userSettingsData = userSettings
+                .getUserSettingsData()
+                .first()
+
+            buildInitialUserSettings(userSettingsData)
+        }
+    }
+
+    internal fun buildInitialUserSettings(userSettingsData: UserSettingsData) {
+        val gender = userSettingsData.gender.ifEmpty { Gender.FEMALE.name }
+
+        val heightUnit = HeightUnit.fromLabel(userSettingsData.selectedHeightUnit)
+        val weightUnit = WeightUnit.fromLabel(userSettingsData.selectedWeightUnit)
+
+        val (feet, inches) = if(heightUnit == HeightUnit.FEET) {
+            measurementRepository.cmToFeetAndInches(userSettingsData.height)
+        } else {
+            Pair(0, 0)
+        }
+
+        val lbs = if(weightUnit == WeightUnit.POUNDS) {
+            measurementRepository.kgToLbs(userSettingsData.weight)
+        } else {
+            userSettingsData.weight
+        }
+
+        val displayHeight = when (heightUnit) {
+            HeightUnit.CENTIMETERS -> "${userSettingsData.height} ${heightUnit.label}"
+            HeightUnit.FEET -> "${feet}ft/${inches}in"
+        }
+
+        val displayWeight = when(weightUnit) {
+            WeightUnit.KILOS -> "${userSettingsData.weight} ${WeightUnit.KILOS.label}"
+            WeightUnit.POUNDS -> "$lbs ${WeightUnit.POUNDS.label}"
+        }
+
+        _state.value = _state.value.copy(
+            gender = Gender.valueOf(gender),
+            heightUnit = heightUnit,
+            selectedHeightUnit = heightUnit,
+            weightUnit = weightUnit,
+            selectedWeightUnit = weightUnit,
+            height = userSettingsData.height,
+            selectedHeightValue = userSettingsData.height,
+            selectedHeightFeet = feet,
+            selectedHeightInches = inches,
+            weight = if (weightUnit == WeightUnit.KILOS) userSettingsData.weight else lbs,
+            selectedWeightValue = if (weightUnit == WeightUnit.KILOS) userSettingsData.weight else lbs,
+            displayHeight = displayHeight,
+            displayWeight = displayWeight,
+        )
     }
 
     private fun setGender(gender: Gender) {
@@ -215,8 +223,7 @@ class PersonalSettingsViewModel(
     }
 
     private fun onSavePersonalSettingsClick() {
-        viewModelScope.launch(Dispatchers.IO) {
-            userSettings.setGender(state.value.gender.name)
+        viewModelScope.launch {
             val height = if(state.value.selectedHeightUnit == HeightUnit.FEET) {
                 measurementRepository.feetAndInchesToCm(
                     state.value.selectedHeightFeet,
@@ -225,15 +232,16 @@ class PersonalSettingsViewModel(
             } else {
                 state.value.selectedHeightValue
             }
-            userSettings.setHeight(height)
-            userSettings.setHeightUnit(state.value.selectedHeightUnit.label)
-            userSettings.setWeightUnit(state.value.selectedWeightUnit.label)
             val weight = if(state.value.selectedWeightUnit == WeightUnit.POUNDS) {
                 measurementRepository.lbsToKg(state.value.selectedWeightValue)
             } else {
                 state.value.selectedWeightValue
             }
+            userSettings.setGender(state.value.gender.name)
+            userSettings.setHeight(height)
+            userSettings.setHeightUnit(state.value.selectedHeightUnit.label)
             userSettings.setWeight(weight)
+            userSettings.setWeightUnit(state.value.selectedWeightUnit.label)
 
             _event.send(PersonalSettingsEvent.OnPersonalSettingsSaved)
         }

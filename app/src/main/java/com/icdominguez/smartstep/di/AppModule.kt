@@ -1,5 +1,8 @@
 package com.icdominguez.smartstep.di
 
+import android.content.Context
+import android.hardware.Sensor
+import android.hardware.SensorManager
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
@@ -8,6 +11,7 @@ import com.icdominguez.smartstep.data.MeasurementRepositoryImpl
 import com.icdominguez.smartstep.data.StepCounterManager
 import com.icdominguez.smartstep.data.UserSettingsDataStore
 import com.icdominguez.smartstep.domain.MeasurementRepository
+import com.icdominguez.smartstep.domain.StepCounter
 import com.icdominguez.smartstep.domain.UserSettings
 import com.icdominguez.smartstep.presentation.MainViewModel
 import com.icdominguez.smartstep.presentation.screens.home.HomeViewModel
@@ -34,8 +38,19 @@ val appModule = module {
         MeasurementRepositoryImpl()
     }
 
-    single {
-        StepCounterManager(androidContext())
+    single<SensorManager> {
+        androidContext().getSystemService(Context.SENSOR_SERVICE) as SensorManager
+    }
+
+    single<Sensor?> {
+        get<SensorManager>().getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+    }
+
+    single<StepCounter> {
+        StepCounterManager(
+            sensorManager = get(),
+            stepCounterSensor = get()
+        )
     }
 
     viewModelOf(::MainViewModel)

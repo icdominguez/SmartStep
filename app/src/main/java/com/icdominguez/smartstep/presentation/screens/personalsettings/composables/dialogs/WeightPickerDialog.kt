@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs
+package com.icdominguez.smartstep.presentation.screens.personalsettings.composables.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,9 +18,9 @@ import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStep
 import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepWheelPicker
 import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.TextButton
 import com.icdominguez.smartstep.presentation.designsystem.composables.switcher.UnitSwitcher
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
-import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextSecondary
 import com.icdominguez.smartstep.domain.model.WeightUnit
 
 private const val MIN_WEIGHT = 40

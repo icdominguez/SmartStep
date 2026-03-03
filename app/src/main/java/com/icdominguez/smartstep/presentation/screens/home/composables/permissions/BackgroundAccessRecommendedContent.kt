@@ -14,8 +14,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
 import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
 
 @Composable
 fun BackgroundAccessRecommendedContent(

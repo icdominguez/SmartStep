@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.icdominguez.smartstep.presentation.designsystem.BackgroundSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.BackgroundSecondary
 
 @Composable
 fun SmartStepCustomDialog(

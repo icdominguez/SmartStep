@@ -2,9 +2,8 @@ package com.icdominguez.smartstep.presentation.screens.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.icdominguez.smartstep.data.StepCounterManager
+import com.icdominguez.smartstep.domain.StepCounter
 import com.icdominguez.smartstep.domain.UserSettings
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +12,8 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(
     private val userSettings: UserSettings,
-    private val stepCounterManager: StepCounterManager,
+    private val stepCounter: StepCounter,
+
 ) : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state = _state.asStateFlow()
@@ -22,31 +22,9 @@ class HomeViewModel(
     val event = _event.receiveAsFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            userSettings.getBackgroundAccessEnabled().collect { isBackgroundAccessEnabled ->
-                if(isBackgroundAccessEnabled == true) stepCounterManager.start()
-                _state.value = _state.value.copy(
-                    isBackgroundAccessEnabled = isBackgroundAccessEnabled
-                )
-            }
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            userSettings.getStepGoal().collect { stepGoal ->
-                _state.value = _state.value.copy(
-                    stepGoal = stepGoal,
-                    selectedStepGoal = stepGoal,
-                )
-            }
-        }
-
-        viewModelScope.launch {
-            stepCounterManager.steps.collect { steps ->
-                _state.value = _state.value.copy(
-                    steps = steps
-                )
-            }
-        }
+        observeIsBackgroundAccessEnabled()
+        observeStepGoal()
+        observeSteps()
     }
 
     fun onAction(action: HomeAction) {
@@ -74,9 +52,41 @@ class HomeViewModel(
         }
     }
 
+    private fun observeIsBackgroundAccessEnabled() {
+        viewModelScope.launch {
+            userSettings.getBackgroundAccessEnabled().collect { isBackgroundAccessEnabled ->
+                _state.value = _state.value.copy(
+                    isBackgroundAccessEnabled = isBackgroundAccessEnabled
+                )
+            }
+        }
+    }
+
+    private fun observeStepGoal() {
+        viewModelScope.launch {
+            userSettings.getStepGoal().collect { stepGoal ->
+                _state.value = _state.value.copy(
+                    stepGoal = stepGoal,
+                    selectedStepGoal = stepGoal,
+                )
+            }
+        }
+    }
+
+    private fun observeSteps() {
+        viewModelScope.launch {
+            stepCounter.steps.collect { steps ->
+                _state.value = _state.value.copy(
+                    steps = steps
+                )
+            }
+        }
+    }
+
     private fun onActivityRecognitionPermissionChecked(isGranted: Boolean) {
         viewModelScope.launch {
             if (isGranted) {
+                stepCounter.start()
                 if (state.value.isBackgroundAccessEnabled == null) {
                     _state.value = _state.value.copy(
                         showBackgroundAccessRecommendedDialog = true
@@ -89,6 +99,8 @@ class HomeViewModel(
     }
 
     private fun onActivityRecognitionGranted() {
+        stepCounter.start()
+
         _state.value = _state.value.copy(
             showBackgroundAccessRecommendedDialog = true
         )
@@ -179,7 +191,7 @@ class HomeViewModel(
     }
 
     private fun onExitConfirm() {
-        stepCounterManager.stop()
+        stepCounter.stop()
 
         _state.value = _state.value.copy(
             showExitDialog = false

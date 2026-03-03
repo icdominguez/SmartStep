@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepPickerInput
-import com.icdominguez.smartstep.presentation.designsystem.BackgroundWhite
+import com.icdominguez.smartstep.presentation.designsystem.theme.BackgroundWhite
 import com.icdominguez.smartstep.domain.model.Gender
-import com.icdominguez.smartstep.presentation.utils.UiText
-import com.icdominguez.smartstep.presentation.utils.toUiText
+import com.icdominguez.smartstep.presentation.designsystem.utils.UiText
+import com.icdominguez.smartstep.presentation.designsystem.utils.toUiText
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

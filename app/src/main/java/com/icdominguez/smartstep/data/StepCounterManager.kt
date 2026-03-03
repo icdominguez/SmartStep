@@ -1,29 +1,27 @@
 package com.icdominguez.smartstep.data
 
-import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.util.Log
+import com.icdominguez.smartstep.domain.StepCounter
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import timber.log.Timber
 
 class StepCounterManager(
-    context: Context
-) : SensorEventListener {
-
-    private val sensorManager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-    private val stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+    private val sensorManager: SensorManager,
+    private val stepCounterSensor: Sensor?
+) : StepCounter, SensorEventListener {
 
     private val _steps = MutableStateFlow(0)
-    val steps: StateFlow<Int> = _steps
+    override val steps: StateFlow<Int> = _steps
 
     private var baseline: Int? = null
     private var isRegistered = false
 
-    fun start() {
-        Log.d("icd", "Step counter initialized")
+    override fun start() {
+        Timber.tag("icd").d("Step counter initialized")
 
         val sensor = stepCounterSensor ?: return
 
@@ -40,9 +38,9 @@ class StepCounterManager(
         }
     }
 
-    fun stop() {
+    override fun stop() {
         if (isRegistered) {
-            Log.d("icd", "Step counter stopped")
+            Timber.tag("icd").d("Step counter stopped")
             sensorManager.unregisterListener(this)
             isRegistered = false
         }
@@ -55,7 +53,7 @@ class StepCounterManager(
         val base = baseline ?: totalSinceBoot.also { baseline = it }
 
         val steps = (totalSinceBoot - base).coerceAtLeast(0)
-        Log.d("icd", "Step sensor changed: STEPS - $steps")
+        Timber.tag("icd").d("Step sensor changed: STEPS - $steps")
         _steps.value = (totalSinceBoot - base).coerceAtLeast(0)
     }
 }
