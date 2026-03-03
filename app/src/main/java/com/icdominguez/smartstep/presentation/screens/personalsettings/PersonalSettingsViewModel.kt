@@ -4,9 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.icdominguez.smartstep.domain.MeasurementRepository
 import com.icdominguez.smartstep.domain.UserSettings
-import com.icdominguez.smartstep.presentation.model.Gender
-import com.icdominguez.smartstep.presentation.model.HeightUnit
-import com.icdominguez.smartstep.presentation.model.WeightUnit
+import com.icdominguez.smartstep.domain.model.Gender
+import com.icdominguez.smartstep.domain.model.HeightUnit
+import com.icdominguez.smartstep.domain.model.WeightUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

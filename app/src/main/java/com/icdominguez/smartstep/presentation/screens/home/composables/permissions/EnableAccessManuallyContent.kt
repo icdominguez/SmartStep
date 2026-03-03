@@ -1,23 +1,24 @@
-package com.icdominguez.smartstep.presentation.screens.home.composables
+package com.icdominguez.smartstep.presentation.screens.home.composables.permissions
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.composables.buttons.PrimaryButton
 import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
 import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
 import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
+import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
 
 @Composable
 fun ManualPermissionContent(
@@ -25,8 +26,7 @@ fun ManualPermissionContent(
     onOpenSettingsClick: () -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .padding(all = 16.dp),
+        modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -85,6 +85,16 @@ fun ManualPermissionContent(
                 .fillMaxWidth(),
             text = stringResource(R.string.modal_bottom_sheet_2_button),
             onClick = { onOpenSettingsClick() }
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ManualPermissionContentPreview() {
+    SmartStepTheme {
+        ManualPermissionContent(
+            onOpenSettingsClick = {}
         )
     }
 }

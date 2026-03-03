@@ -7,7 +7,7 @@ sealed interface HomeAction {
     data object OnActivityRecognitionGranted : HomeAction
     data class OnActivityRecognitionDenied(val showRationale: Boolean) : HomeAction
     // end region
-    data class OnIgnoreBatteryOptimizationsResponse(val isIgnored: Boolean): HomeAction
+    data class OnBackgroundAccessPermissionResponse(val isEnabled: Boolean): HomeAction
     data object OnOpenManualSettings : HomeAction
     data object OnContinueBackgroundAccess : HomeAction
     // end region
