@@ -7,8 +7,8 @@ import com.icdominguez.smartstep.domain.model.WeightUnit
 data class PersonalSettingsState(
     val gender: Gender = Gender.MALE,
     // Source of true
-    val height: Int = 175,
-    val weight: Int = 65,
+    val height: Int = 0,
+    val weight: Int = 0,
     val weightUnit: WeightUnit = WeightUnit.KILOS,
     val heightUnit: HeightUnit = HeightUnit.CENTIMETERS,
     // Selected values

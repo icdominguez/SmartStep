@@ -27,11 +27,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.designsystem.ButtonSecondary
-import com.icdominguez.smartstep.presentation.designsystem.OnSecondaryContainer
-import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
-import com.icdominguez.smartstep.presentation.designsystem.StrokeMain
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.ButtonSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.OnSecondaryContainer
+import com.icdominguez.smartstep.presentation.designsystem.theme.SmartStepTheme
+import com.icdominguez.smartstep.presentation.designsystem.theme.StrokeMain
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
 
 @Composable
 fun SwitcherOption(

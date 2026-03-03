@@ -21,11 +21,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.designsystem.BackgroundSecondary
-import com.icdominguez.smartstep.presentation.designsystem.ButtonPrimary
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.BackgroundSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.ButtonPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.SmartStepTheme
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
 
 @Composable
 fun SmartStepDropDownItem(

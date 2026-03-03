@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.designsystem
+package com.icdominguez.smartstep.presentation.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

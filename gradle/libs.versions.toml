@@ -1,14 +1,14 @@
 [versions]
-agp = "9.0.0"
-activityCompose = "1.12.3"
-composeBom = "2026.01.01"
+agp = "9.0.1"
+activityCompose = "1.12.4"
+composeBom = "2026.02.00"
 coreKtx = "1.17.0"
 coreSplashscreen = "1.2.0"
 coroutines = "1.10.2"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
-junit = "4.13.2"
-junitVersion = "1.3.0"
+junit = "6.0.3"
+androidJunit5 = "1.10.0.0"
 kotlin = "2.3.10"
 koinAndroid = "4.1.1"
 koinAndroidxCompose = "4.1.1"
@@ -16,16 +16,16 @@ koinAndroidxComposeNavigation = "4.1.1"
 koinComposeViewmodel = "4.1.1"
 kotlinSerialization = "2.3.10"
 kotlinxSerializationCore = "1.10.0"
-navigation3 = "1.1.0-alpha03"
+navigation3 = "1.1.0-alpha04"
 nav3Lifecycle = "2.10.0"
 material3 = "1.4.0"
 material3Adaptive = "1.2.0"
 datastorePreferences = "1.2.0"
+mockk = "1.14.9"
+timber = "5.0.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-junit = { group = "junit", name = "junit", version.ref = "junit" }
-androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
@@ -71,7 +71,19 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 androidx-datastore-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "datastorePreferences" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 
+# Testing
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junit-jupiter-params = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junit-jupiter-engine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform-launcher", version = "junit" }
+kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines" }
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+
+# Timber
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlinSerialization"}
+android-junit5 = { id = "de.mannodermaus.android-junit5", version.ref = "androidJunit5" }

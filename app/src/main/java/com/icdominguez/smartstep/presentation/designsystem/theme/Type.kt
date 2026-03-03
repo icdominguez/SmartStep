@@ -1,6 +1,5 @@
-package com.icdominguez.smartstep.presentation.designsystem
+package com.icdominguez.smartstep.presentation.designsystem.theme
 
-import androidx.compose.material3.Typography
 import androidx.compose.runtime.ProvidableCompositionLocal
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.staticCompositionLocalOf

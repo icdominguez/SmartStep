@@ -39,7 +39,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.designsystem.BackgroundSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.BackgroundSecondary
 import com.icdominguez.smartstep.presentation.designsystem.composables.AdaptiveOverlay
 import com.icdominguez.smartstep.presentation.screens.home.composables.HomeTopBar
 import com.icdominguez.smartstep.presentation.screens.home.composables.NavigationDrawerItem
@@ -49,8 +49,8 @@ import com.icdominguez.smartstep.presentation.screens.home.composables.permissio
 import com.icdominguez.smartstep.presentation.screens.home.composables.permissions.BackgroundAccessRecommendedContent
 import com.icdominguez.smartstep.presentation.screens.home.composables.permissions.ManualPermissionContent
 import com.icdominguez.smartstep.presentation.screens.home.composables.stepsinformationcard.StepsInformationCard
-import com.icdominguez.smartstep.presentation.utils.DeviceConfiguration
-import com.icdominguez.smartstep.presentation.utils.ObserveAsEvents
+import com.icdominguez.smartstep.presentation.designsystem.utils.DeviceConfiguration
+import com.icdominguez.smartstep.presentation.designsystem.utils.ObserveAsEvents
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 

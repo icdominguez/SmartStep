@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.utils
+package com.icdominguez.smartstep.presentation.designsystem.utils
 
 import android.content.Context
 import androidx.annotation.StringRes

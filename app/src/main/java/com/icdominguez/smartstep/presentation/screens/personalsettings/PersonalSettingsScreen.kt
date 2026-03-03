@@ -29,19 +29,19 @@ import com.icdominguez.smartstep.R
 import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepPickerInput
 import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
 import com.icdominguez.smartstep.presentation.designsystem.composables.dropdown.SmartStepDropDownMenu
-import com.icdominguez.smartstep.presentation.designsystem.BackgroundWhite
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.BackgroundWhite
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.SmartStepTheme
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
 import com.icdominguez.smartstep.domain.model.Gender
 import com.icdominguez.smartstep.domain.model.HeightUnit
 import com.icdominguez.smartstep.domain.model.WeightUnit
 import com.icdominguez.smartstep.presentation.screens.personalsettings.composables.PersonalSettingsTopBar
-import com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs.HeightPickerDialog
-import com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs.WeightPickerDialog
-import com.icdominguez.smartstep.presentation.utils.DeviceConfiguration
-import com.icdominguez.smartstep.presentation.utils.ObserveAsEvents
-import com.icdominguez.smartstep.presentation.utils.toUiText
+import com.icdominguez.smartstep.presentation.screens.personalsettings.composables.dialogs.HeightPickerDialog
+import com.icdominguez.smartstep.presentation.screens.personalsettings.composables.dialogs.WeightPickerDialog
+import com.icdominguez.smartstep.presentation.designsystem.utils.DeviceConfiguration
+import com.icdominguez.smartstep.presentation.designsystem.utils.ObserveAsEvents
+import com.icdominguez.smartstep.presentation.designsystem.utils.toUiText
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

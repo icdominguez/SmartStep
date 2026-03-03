@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.screens.personalsettings.dialogs
+package com.icdominguez.smartstep.presentation.screens.personalsettings.composables.dialogs
 
 import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
@@ -21,9 +21,9 @@ import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStep
 import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepWheelPicker
 import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.TextButton
 import com.icdominguez.smartstep.presentation.designsystem.composables.switcher.UnitSwitcher
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
-import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextSecondary
 import com.icdominguez.smartstep.domain.model.HeightUnit
 
 private const val MIN_HEIGHT = 60
@@ -87,9 +87,8 @@ fun HeightPickerDialog(
                 HeightUnit.CENTIMETERS -> {
                     SmartStepWheelPicker(
                         items = HEIGHT_RANGE.map { it },
-                        onSelected = { index, item ->
+                        onSelected = { _, item ->
                             onHeightValueChange(item)
-                            Log.d("HeightPickerDialog", "Selected index: $index, item: $item")
                         },
                         initialSelectedIndex = height - MIN_HEIGHT,
                     ) { item, isSelected ->
@@ -111,9 +110,8 @@ fun HeightPickerDialog(
                             modifier = Modifier
                                 .weight(1f),
                             items = (0..9).map { it },
-                            onSelected = { index, item ->
+                            onSelected = { _, item ->
                                 onHeightFeetValueChange(item)
-                                Log.d("HeightPickerDialog", "Selected index: $index, item: $item")
                             },
                             initialSelectedIndex = selectedHeightFeet,
                         ) { item, isSelected ->
@@ -153,9 +151,8 @@ fun HeightPickerDialog(
                             modifier = Modifier
                                 .weight(1f),
                             items = (0..9).map { it },
-                            onSelected = { index, item ->
+                            onSelected = { _, item ->
                                 onHeightInchesValueChange(item)
-                                Log.d("HeightPickerDialog", "Selected index: $index, item: $item")
                             },
                             initialSelectedIndex = selectedHeightInches,
                         ) { item, isSelected ->

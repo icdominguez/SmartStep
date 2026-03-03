@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.utils
+package com.icdominguez.smartstep.presentation.designsystem.utils
 
 import com.icdominguez.smartstep.R
 import com.icdominguez.smartstep.domain.model.Gender

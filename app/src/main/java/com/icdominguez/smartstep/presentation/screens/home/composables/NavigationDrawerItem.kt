@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.SmartStepTheme
-import com.icdominguez.smartstep.presentation.designsystem.StrokeMain
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.SmartStepTheme
+import com.icdominguez.smartstep.presentation.designsystem.theme.StrokeMain
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
 
 @Composable
 fun NavigationDrawerItem(

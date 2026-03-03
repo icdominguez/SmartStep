@@ -14,9 +14,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.TextPrimary
-import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextPrimary
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextSecondary
 import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepWheelPicker
 import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
 import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.TextButton

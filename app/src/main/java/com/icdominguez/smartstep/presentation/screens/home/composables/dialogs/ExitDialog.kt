@@ -18,8 +18,8 @@ import androidx.compose.ui.unit.dp
 import com.icdominguez.smartstep.R
 import com.icdominguez.smartstep.presentation.designsystem.composables.SmartStepCustomDialog
 import com.icdominguez.smartstep.presentation.designsystem.composables.buttons.PrimaryButton
-import com.icdominguez.smartstep.presentation.designsystem.LocalSmartStepTypography
-import com.icdominguez.smartstep.presentation.designsystem.TextSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.LocalSmartStepTypography
+import com.icdominguez.smartstep.presentation.designsystem.theme.TextSecondary
 
 @Composable
 fun ExitDialog(

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.icdominguez.smartstep.domain.UserSettings
 import com.icdominguez.smartstep.domain.UserSettingsData
+import com.icdominguez.smartstep.domain.UserSettingsDefaults
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -16,13 +17,15 @@ class UserSettingsDataStore(
 ): UserSettings {
     override fun getUserSettingsData(): Flow<UserSettingsData> {
         return dataStore.data.map { preferences ->
-            UserSettingsData(
-                gender = preferences[GENDER_KEY] ?: "",
-                height = preferences[HEIGHT_KEY] ?: 0,
-                weight = preferences[WEIGHT_KEY] ?: 0,
-                selectedHeightUnit = preferences[SELECTED_HEIGHT_UNIT_KEY] ?: "",
-                selectedWeightUnit = preferences[SELECTED_WEIGHT_UNIT_KEY] ?: ""
-            )
+            with(UserSettingsDefaults) {
+                UserSettingsData(
+                    gender = preferences[GENDER_KEY] ?: GENDER_DEFAULT,
+                    height = preferences[HEIGHT_KEY] ?: HEIGHT_DEFAULT,
+                    weight = preferences[WEIGHT_KEY] ?: WEIGHT_DEFAULT,
+                    selectedHeightUnit = preferences[SELECTED_HEIGHT_UNIT_KEY] ?: HEIGHT_UNIT_DEFAULT,
+                    selectedWeightUnit = preferences[SELECTED_WEIGHT_UNIT_KEY] ?: WEIGHT_UNIT_DEFAULT
+                )
+            }
         }
     }
 

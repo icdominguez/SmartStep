@@ -13,7 +13,7 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.icdominguez.smartstep.presentation.designsystem.BackgroundSecondary
+import com.icdominguez.smartstep.presentation.designsystem.theme.BackgroundSecondary
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

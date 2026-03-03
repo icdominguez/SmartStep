@@ -1,4 +1,4 @@
-package com.icdominguez.smartstep.presentation.utils
+package com.icdominguez.smartstep.presentation.designsystem.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
