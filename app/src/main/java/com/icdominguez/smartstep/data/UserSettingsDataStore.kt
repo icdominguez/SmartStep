@@ -2,6 +2,7 @@ package com.icdominguez.smartstep.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -55,9 +56,21 @@ class UserSettingsDataStore(
         }
     }
 
+    override suspend fun setBatteryOptIgnored(ignored: Boolean) {
+        dataStore.edit { preferences ->
+            preferences[BATTERY_OPT_IGNORED_KEY] = ignored
+        }
+    }
+
+    override fun getBatteryOptIgnored(): Flow<Boolean?> {
+        return dataStore.data.map { preferences ->
+            preferences[BATTERY_OPT_IGNORED_KEY]
+        }
+    }
+
     override fun getStepGoal(): Flow<Int> {
         return dataStore.data.map { preferences ->
-            preferences[STEP_GOAL_KEY] ?: 0
+            preferences[STEP_GOAL_KEY] ?: 10000
         }
     }
 
@@ -73,6 +86,7 @@ class UserSettingsDataStore(
         private val WEIGHT_KEY = intPreferencesKey("weight")
         private val SELECTED_HEIGHT_UNIT_KEY = stringPreferencesKey("selected_height_unit")
         private val SELECTED_WEIGHT_UNIT_KEY = stringPreferencesKey("selected_weight_unit")
+        private val BATTERY_OPT_IGNORED_KEY = booleanPreferencesKey("battery_opt_ignored")
         private val STEP_GOAL_KEY = intPreferencesKey("step_goal")
     }
 }

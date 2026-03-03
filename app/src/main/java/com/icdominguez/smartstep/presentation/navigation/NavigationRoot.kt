@@ -39,7 +39,7 @@ fun NavigationRoot(
                             viewModel = viewModel,
                             onNavigateToHome = {
                                 backStack.add(Route.Home)
-                                backStack.remove(Route.PersonalSettings())
+                                backStack.remove(key)
                             },
                             isOnBoarding = key.isFromOnBoarding,
                             onNavigateBack = {
@@ -53,8 +53,7 @@ fun NavigationRoot(
                         val viewModel = koinViewModel<HomeViewModel>()
 
                         HomeScreen(
-                            state = viewModel.state.collectAsStateWithLifecycle().value,
-                            onAction = viewModel::onAction,
+                            viewModel = viewModel,
                             onNavigateToPersonalSettings = {
                                 backStack.add(Route.PersonalSettings())
                             },

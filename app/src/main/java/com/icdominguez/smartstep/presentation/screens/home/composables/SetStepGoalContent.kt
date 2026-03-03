@@ -29,6 +29,8 @@ internal val STEP_GOAL_RANGE = (MIN_STEP_GOAL..MAX_STEP_GOAL step 1000).reversed
 fun SetStepGoalContent(
     modifier: Modifier = Modifier,
     isTablet: Boolean = false,
+    stepGoal: Int,
+    onStepGoalChange: (Int) -> Unit,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -52,7 +54,10 @@ fun SetStepGoalContent(
 
         SmartStepWheelPicker(
             items = STEP_GOAL_RANGE.map { it },
-            onSelected = { _, _ -> }
+            onSelected = { _, item ->
+                onStepGoalChange(item)
+            },
+            initialSelectedIndex = STEP_GOAL_RANGE.indexOf(stepGoal),
         ) { item, isSelected ->
             Row(
                 modifier = Modifier,
